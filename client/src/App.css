@@ -1,6 +1,9 @@
 .App {
   text-align: center;
 }
+.div-container > *{
+  direction: rtl;
+}
 
 .App-logo {
   height: 40vmin;
