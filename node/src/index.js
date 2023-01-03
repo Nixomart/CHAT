@@ -5,22 +5,27 @@ import http from "http";
 import cors from "cors";
 
 const app = express();
-
 const server = http.createServer(app);
+const PORT = 4000;
 const io = new SocketServer(server, {
   cors: {
     origin: "http://localhost:3000",
   },
 });
 app.use(cors());
+app.use(morgan("dev"));
 
 io.on("connection", (socket) => {
   console.log("socket.id", socket.id);
 
-  console.log("user connected");
+  socket.on('messageFront', (message)=>{
+    console.log(message)
+    socket.broadcast.emit('responseBack', {
+      body:message,
+      author: socket.id
+    })
+  })
 });
 
-app.use(morgan("dev"));
-const PORT = 4000;
 server.listen(PORT);
 console.log("PORT", PORT);
