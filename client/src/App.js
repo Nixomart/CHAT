@@ -2,12 +2,14 @@ import "./App.css";
 import io from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import { FiMoon } from "react-icons/fi";
+import {BsFillSunFill } from 'react-icons/bs'
 const socket = io("http://localhost:4000/");
 
 function App() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [theme, setTheme] = useState(null);
+  const [moon, setMoon] =useState(false)
 
   //creamos el useRef
   const divRef = useRef(null);
@@ -47,6 +49,7 @@ function App() {
   useEffect(()=>{
     if(window.matchMedia('{prefers-colors-scheme: dark').matches){
       setTheme('dark')
+
     }else{
       setTheme('light')
     }
@@ -55,19 +58,23 @@ function App() {
   //dark mode
   const handleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
+    setMoon(moon === 'dark' ? 'light' : 'dark' )
   };
 
   return (
-    <div className="App flex flex-col justify-center h-screen items-center">
+    <div className="App flex flex-col  bg-gray-100 dark:bg-slate-900  justify-center h-screen items-center">
+      
       <button onClick={handleTheme}>
-        <FiMoon size={"30"} />
+
+        {moon === 'dark' ? (<BsFillSunFill size={'30'} color='white' />) :  (<FiMoon size={'30'}   /> )  }
+
       </button>
       {/* ref para mover el div hacia el ultimo mensaje */}
       <div
         ref={divRef}
-        className="overflow-auto dark:boder-white dark:bg-slate-800 dark:text-white max-h-3/4 h-3/4 w-2/3 rounded-xl border border-violet-700 "
+        className="overflow-auto dark:boder-white shadow-2xl dark:shadow-gray-900 bg-white dark:bg-slate-800 dark:text-white max-h-3/4 h-3/4 w-2/3 rounded-xl border dark:border-none border-violet-700 "
       >
-        <div className="fixed w-2/3 bg-slate-200 shadow-xl rounded-xl  h-12 items-center flex justify-center">
+        <div className="fixed w-2/3 bg-violet-200 dark:bg-violet-900 shadow-xl rounded-xl  h-12 items-center flex justify-center">
           <h1 className=" top-0  text-center">
             Bienvenido al chat con vos solo
           </h1>
